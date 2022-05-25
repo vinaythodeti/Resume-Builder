@@ -1,0 +1,183 @@
+<div *ngIf="isProgress">
+    <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+</div>
+<div class="logincardcenter">
+    <div class="card">
+        <p-tabMenu [model]="items" [activeItem]="items[0]"></p-tabMenu>
+        <div *ngIf="loginComponent">
+            <div class="row" style="margin-top:20px;">
+                <div class="col">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-envelope"></i> 
+                        <input type="text" [(ngModel)]="loginuser.email" pInputText placeholder="Email"
+                        name="email" id="email" #email="ngModel"
+                        [ngClass]="{ 'input-border-green' : !(loginSubmitted && email.invalid),
+                        'input-border-red': loginSubmitted && email.invalid}"
+                        />         
+                    </span>     
+                </div>         
+            </div> 
+            <div class="row" style="margin-top:10px;">
+                <div class="col">
+                    <span class="p-input-icon-left">
+                    <i class="pi pi-lock"></i> 
+                    <input type="password" [(ngModel)]="loginuser.password" pInputText placeholder="Password"
+                    name="password" id="password" #password="ngModel"
+                    [ngClass]="{ 'input-border-green' : !(loginSubmitted && password.invalid),
+                    'input-border-red': loginSubmitted && password.invalid}"
+                    />         
+                    </span>     
+                </div>         
+            </div> 
+        </div>
+        <div *ngIf="signupComponent">
+            <form #signupForm="ngForm"  novalidate>
+                <div class="row" style="margin-top:20px;">
+                    <div class="col">
+                        <span class="p-input-icon-left">
+                            <i class="pi pi-envelope"></i> 
+                            <input type="text" [(ngModel)]="registerUser.email" pInputText placeholder="Email *"
+                            name="emailsignup" id="emailsignup" #emailsignup="ngModel" required
+                            [ngClass]="{ 'input-border-green' : !(signupSubmitted && emailsignup.invalid),
+                            'input-border-red': signupSubmitted && emailsignup.invalid}"
+                            />         
+                        </span>     
+                    </div>         
+                </div> 
+                <div class="row" style="margin-top:10px;">
+                    <div class="col">
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-user"></i> 
+                        <input type="text" [(ngModel)]="registerUser.username" pInputText placeholder="User Name *"
+                        name="usernamesignup" id="usernamesignup" #usernamesignup="ngModel" required
+                        [ngClass]="{ 'input-border-green' : !(signupSubmitted && usernamesignup.invalid),
+                        'input-border-red': signupSubmitted && usernamesignup.invalid}"
+                        />         
+                        </span>     
+                    </div>         
+                </div>
+                <div class="row" style="margin-top:10px;">
+                    <div class="col">
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-pencil"></i> 
+                        <input type="text" [(ngModel)]="registerUser.first_name" pInputText placeholder="First Name *"
+                        name="firstname" id="firstname" #firstname="ngModel" required
+                        [ngClass]="{ 'input-border-green' : !(signupSubmitted && firstname.invalid),
+                        'input-border-red': signupSubmitted && firstname.invalid}"
+                        />         
+                        </span>     
+                    </div>         
+                </div>
+                <div class="row" style="margin-top:10px;">
+                    <div class="col">
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-pencil"></i> 
+                        <input type="text" [(ngModel)]="registerUser.last_name" pInputText placeholder="Last Name *"
+                        name="lastname" id="lastname" #lastname="ngModel" required
+                        [ngClass]="{ 'input-border-green' : !(signupSubmitted && lastname.invalid),
+                        'input-border-red': signupSubmitted && lastname.invalid}"
+                        />         
+                        </span>     
+                    </div>         
+                </div>
+                <div class="row" style="margin-top:10px;">
+                    <div class="col">
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-lock"></i> 
+                        <input type="password" pPassword  [(ngModel)]="registerUser.password" placeholder="Password *"
+                        name="passwordsignup"  minlength="8" autocomplete="off" id="passwordsignup" #passwordsignup="ngModel"  required
+                        [ngClass]="{ 'input-border-green' : !(signupSubmitted && passwordsignup.invalid),
+                        'input-border-red': signupSubmitted && passwordsignup.invalid}"
+                        />         
+                        </span>     
+                    </div>
+                     <div *ngIf="passwordsignup?.errors?.minlength" class="label-required-error">
+                            Password should be more than 8 Characters
+                     </div>          
+                </div>
+                <div class="row" style="margin-top:10px;">
+                    <div class="col">
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-lock"></i> 
+                        <input type="password" pPassword  [(ngModel)]="registerUser.password2" placeholder="Retype Password*"
+                        name="passwordsignupp" id="passss" autocomplete="off" #passwordsignupp="ngModel" required (blur)="matchPassword()"
+                        [ngClass]="{ 'input-border-green' : !(signupSubmitted && passwordsignupp.invalid),
+                        'input-border-red': signupSubmitted && passwordsignupp.invalid}"
+                        />         
+                        </span> 
+                        <div *ngIf="passwordNotMatched" class="label-required-error">
+                            Password Not matched
+                        </div>    
+                    </div>
+                </div>             
+                <div class="row" style="margin-top:10px;">
+                    <div class="col">
+                        <p-button type="button" label="Submit" [disabled]="isOTPSent || isSubmittedForOtp" icon="pi pi-chevron-right" (click)="generateOTPSignup()"  class="p-button-info"></p-button>
+                    </div>
+                </div>
+                <div *ngIf="signupComponent && isOTPSent" style="margin-top:20px;">
+                     <div class="row" style="margin-top:10px;">
+                            <div class="col" style="font-style:bolder;color:grey;">
+                                <div class="col">
+                                    <span>Enter OTP Below</span>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="row" style="margin-top:20px;">
+                            <div class="col">
+                                <span class="p-input-icon-left">
+                                    <i class="pi pi-envelope"></i> 
+                                    <input type="text" [(ngModel)]="otp" pInputText placeholder="_  _  _  _  _  _ _  _"
+                                    name="emaill" id="emaill" [disabled]="registerBtnEnabled" (change)="checkLength('otp')" (keypress)="onNumberKeyPress($event,'otp')"
+                                    />         
+                                </span>  
+                                <div *ngIf="errors.otpLengthError" class="label-required-error">
+                                    <span style="color:#d41c4d;font-weight: 700;font-size: 11px;">OTP must be only 6 digit</span>
+                                </div>    
+                            </div>         
+                    </div>
+                        <div class="row" style="margin-top:20px;">
+                            <div class="col">
+                                <p-button type="button"  maxlength="6" label="Check OTP"
+                                (click)="validateOTP()" [disabled]="otpCheck && !invalidOTP" class="p-button-info"></p-button>         
+                                <div class="col"  *ngIf="!invalidOTP && otpCheck"  style="margin-top:5px;color:#2196F3;font-style:bolder">
+                                    <b><i class="pi pi-check"></i>OTP Successful </b>
+                                </div>
+                                 <div class="col" *ngIf="invalidOTP && otpCheck" class="label-required-error" style="margin-top:5px;font-style:bolder">
+                                    <b><i class="pi pi-times"></i>Invalid OTP</b>
+                                </div>
+                            </div>      
+                        </div>
+                        <div *ngIf="signupComponent && isOTPSent && !invalidOTP" class="row" style="margin-top:20px;">
+                            <div class="col">
+                                <p-button type="button" label="Signup" [disabled]="!registerBtnEnabled" icon="pi pi-chevron-right" (click)="signUpUser()"  class="p-button-info"></p-button>
+                            </div>
+                        </div> 
+                </div> 
+            </form>
+        </div>
+         <div *ngIf="loginComponent" class="row" style="margin-top:20px;">
+            <p-button type="button" label="Login" [disabled]="loginDisabled" icon="pi pi-lock-open" (click)="loginUser()" class="p-button-info"></p-button>
+        </div>
+         <div  class="row" style="margin-top:20px;"> 
+             <button  class="login-Btn" #loginRef >
+                Login With Google &nbsp;<img height="25px" widht="25px" src="https://img.icons8.com/cute-clipart/64/000000/google-logo.png"/>            
+            </button>
+        </div>
+        <div *ngIf="loginComponent">
+             <div  class="row" style="margin-top:20px;color:grey;"> 
+                <span>Forgot Account ?</span>
+            </div>
+            <div class="row" style="color:grey;">
+                <b><a  (click)="forgotPassword()" style="color:grey;">Click here</a></b>&nbsp;
+                <span> to Reset Password</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<p-toast></p-toast>
+<p-toast position="top-left" key="tl"></p-toast>
+<p-toast position="top-center"  key="tc"></p-toast>
+<p-toast position="bottom-center"  key="bc"></p-toast>

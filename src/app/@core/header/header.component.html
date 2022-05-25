@@ -1,0 +1,21 @@
+<div class="header-container">
+  <div class="header-title">
+      <img src="assets/logo/rev-29.jpg" height="50" id="logo" class="p-mr-2">  
+      <span class="titlefirst">Margey</span><span class="titlesecond">Labs</span>
+  </div>
+  <p-menubar [model]="items" styleClass="menucus"  responsive start>
+    <a class ="navbar-brand" href="#">Navbar</a>
+    <ng-template pTemplate="end" class="profile-container">
+    <div *ngIf="!logincomponent">
+      <button *ngIf="token" pButton pRipple type="button" (click)="logout()" [label]="user.username" icon="pi pi-power-off" class="p-button-raised p-button-text p-button-plain"></button>
+      <button *ngIf="!token" pButton pRipple type="button" (click)="login()" label="Login" icon="pi pi-sign-in" class="p-button-raised p-button-text p-button-plain"></button>
+    </div>
+   </ng-template>
+  </p-menubar>
+  <router-outlet></router-outlet>
+</div>
+
+
+<!-- <div>
+        <img src="../../../assets/icons/profile2.png" class="userprofile" alt="" width="60" height="50" />
+      </div>  -->

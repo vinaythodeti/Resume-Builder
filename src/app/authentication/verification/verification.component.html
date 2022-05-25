@@ -1,0 +1,146 @@
+<div class="verifyMainDiv">
+    <div class="card">
+        <form #verifyForm="ngForm" autocomplete="off" novalidate> 
+            <div *ngIf="mode==authenticationModes.CHANGEPASSWORD">
+                <div class="row">
+                    <div class="col" style="color:#0C9ED2;">
+                        <h4><b>Change Password</b></h4>
+                    </div>
+                </div>
+                <hr/>
+                <div class="row" style="margin-top:20px;">
+                    <div class="col">
+                        <span><b>Please enter your email to get verfiication OTP</b></span>
+                    </div>
+                </div>
+                <form #emailForm="ngForm" novalidate>
+                    <div class="row" style="margin-top:20px;">
+                        <div class="col">
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-envelope"></i> 
+                                <input type="text" [(ngModel)]="forgotPassword.email" autocomplete="off" pInputText placeholder="Email"
+                                name="emailId" id="emailId" (change)="validateEmailId()"  #emailId="ngModel" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                                />         
+                            </span> 
+                            <div>
+                                <label *ngIf="emailId?.errors?.pattern" class="label col-form-label label-required-error">
+                                    Email is invalid
+                                </label>
+                            </div>
+                            <div *ngIf="isOTPSent" class="label-successful">
+                            <b><i class="pi pi-check"></i>OTP sent to your emailid</b>
+                            </div>     
+                        </div>        
+                    </div>
+                </form>
+                <div class="row" style="margin-top:20px;">
+                    <div class="col">
+                         <p-button type="button" label="Get OTP" [disabled]="calledAPI" (click)="sendOTP()"  class="p-button-info"></p-button>     
+                    </div>        
+                </div>
+                <div *ngIf="isOTPSent">
+                     <div class="row" style="margin-top:20px;">
+                        <div class="col">
+                            <span>Please check your inbox and enter OTP here to chnage your password</span>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:20px;">
+                        <div class="col">
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-envelope"></i> 
+                                <input type="text" [(ngModel)]="forgotPassword.otp" pInputText placeholder="O  T  P"
+                                name="emaill" id="emaill" (change)="checkLength('otp')" (keypress)="onNumberKeyPress($event,'otp')"
+                                />         
+                            </span>  
+                            <div *ngIf="errors.otpLengthError" class="label-required-error">
+                                <span style="color:#d41c4d;font-weight: 700;font-size: 11px;">OTP must be only 6 digit</span>
+                            </div>    
+                        </div>         
+                    </div>
+                    <div class="row" style="margin-top:20px;">
+                        <div class="col">
+                            <p-button type="button"  maxlength="6" label="Submit"
+                            (click)="validateOTP()" [disabled]="otpCheck && !invalidOTP" class="p-button-info"></p-button>         
+                        </div> 
+                        <div *ngIf="!invalidOTP && otpCheck" class="label-successful">
+                            <b><i class="pi pi-check"></i>OTP Verfiication Successful, Please Set New Password Below </b>
+                        </div> 
+                        <div *ngIf="invalidOTP && otpCheck" class="label-requirer-error">
+                            <b><i class="pi pi-times"></i>Invalid OTP, Please enter valid one</b>
+                        </div>      
+                    </div>
+                </div>
+                <div *ngIf="isPasswordField">
+                     <div class="row" style="margin-top:20px;">
+                        <div class="col" class="label-successful">
+                            <div class="col">
+                                <span style="color: #0C9ED2;font-weight: 600;font-size: 15px;">
+                                <b>Enter New Passwords</b></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:20px;">
+                        <div class="col">
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-envelope"></i> 
+                                <input type="password" Ppassword [(ngModel)]="forgotPassword.new_password" pInputText
+                                placeholder="New Password"
+                                name="passwordinput" id="passwordinput" 
+                                />         
+                            </span>     
+                        </div>        
+                    </div>
+                    <div class="row" style="margin-top:20px;">
+                        <div class="col">
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-envelope"></i> 
+                                <input type="password" Ppassword [(ngModel)]="forgotPassword.new_password2" 
+                                pInputText placeholder="Confirm Password *" required
+                                name="passwordinput2" id="passwordinput2" 
+                                />         
+                            </span>     
+                        </div>        
+                    </div>
+                    <div class="row" style="margin-top:20px;">
+                        <div class="col">
+                            <p-button type="button" [disabled]="isForgotPasswordSubmitted" maxlength="6" label="Change"
+                            (click)="forgotPasswordAPICall()"  class="p-button-info"></p-button>         
+                        </div>        
+                    </div>
+                </div>
+            </div>       
+            <div *ngIf="mode==authenticationModes.EMAIL">
+                <div class="row" style="margin-top:20px;">
+                    <div class="col">
+                        <span class="p-input-icon-left">
+                            <i class="pi pi-envelope"></i> 
+                                <input type="text" [(ngModel)]="email" pInputText placeholder="Email"
+                                name="emailid" id="emailid" 
+                                />         
+                        </span>     
+                    </div>         
+                </div> 
+            </div> 
+            <div *ngIf="mode==authenticationModes.VERIFICATION">
+                <div class="row" style="margin-top:20px;">
+                    <div class="col">
+                        <span class="p-input-icon-left">
+                            <i class="pi pi-envelope"></i> 
+                            <input type="text" [(ngModel)]="email" pInputText placeholder="Email"
+                            name="emails" id="emails" #emails="ngModel"
+                            />         
+                        </span>     
+                    </div>         
+                </div> 
+            </div> 
+        </form> 
+    </div>     
+</div>
+
+
+
+
+<p-toast></p-toast>
+<p-toast position="top-left" key="tl"></p-toast>
+<p-toast position="top-center"  key="tc"></p-toast>
+<p-toast position="bottom-center"  key="bc"></p-toast>

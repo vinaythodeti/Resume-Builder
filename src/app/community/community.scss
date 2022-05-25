@@ -1,0 +1,32 @@
+body{
+    background-color: #f8f9fa;
+   }
+   img{
+       height:300px;;
+       max-width:300px;;
+   }
+   .row{
+       margin-left: 2px;
+   }
+   .col{
+       justify-items: center;
+       align-content: center;
+       align-items: center;
+   }
+   #appdiv{
+       display: flex;
+       justify-items: auto;
+       justify-content: center;
+       align-content: center;
+   }
+   span{
+       color:#0C9ED2;
+       margin-top:20px;
+       font-weight: 500;
+       font-family: inherit;
+       font-size: 1.8rem;
+   }
+   span{
+       box-shadow: 5px 4px 5px 5px solid black;
+   }
+   

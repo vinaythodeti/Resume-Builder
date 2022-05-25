@@ -1,0 +1,36 @@
+<body>
+    <div class="container">
+        <br/><br/><br/><br/>
+        <div class="row">
+            <div class="col">
+                <span  class="homepagetitle" *ngFor="let t of homepagetitles">{{t.title.toUpperCase()}}<br/></span>
+            </div>
+        </div>    
+        <div class="row" class="descriptiondiv">
+            <div class="col" class="homepagedescription">
+                <p>This website is intended to help the freshers for career guidance, In this website we have so products, using
+                    those procuts one can learn many things to get a first job,All our services are free , one can also contact us for the guidance in the contactus page.
+                </p>
+            </div>
+        </div>
+        <div class="row" class="singlebutton">
+            <p-button label="Explore" icon="pi pi-arrow-left" (click)="navigate(routes.APPS)" class="p-button-info" iconPos="right"></p-button>
+        </div>
+        <div class="row" class="advertise">
+            <div class="col">
+                <span  class="advertisetitles" *ngFor="let t of advertiseTItles">{{t.title.toUpperCase()}}<br/></span>
+            </div>
+        </div>
+        <br/>
+        <div class="row" class="advertisebutton">
+            <p-button label="Get Started" icon="pi pi-arrow-right" (click)="navigate(routes.DONATE)" id=" advertisetitles" class="p-button-info" iconPos="left"></p-button>
+        </div>  
+        <br/><br/><br/>      
+    </div>
+</body>
+ <p-toast></p-toast>
+<p-toast position="top-left" key="tl"></p-toast>
+<p-toast position="top-center"  key="tc"></p-toast>
+<p-toast position="bottom-center"  key="bc"></p-toast>
+
+

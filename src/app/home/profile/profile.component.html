@@ -1,0 +1,116 @@
+<div *ngIf="isProgress">
+    <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+</div>
+<div class="logincardcenter">
+    <div class="card">
+        <form #updateForm="ngForm"  novalidate>
+             <div class="row">
+                 <div class="col" style="color:#0C9ED2;">
+                    <h4><b>Your Details</b></h4>
+                </div>
+            </div>
+            <div class="row" style="margin-top:20px;">
+                <div class="col">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-envelope"></i> 
+                        <input type="text" [(ngModel)]="modifyUser.email" pInputText placeholder="Email "
+                        name="emailid" id="emailid" #emailid="ngModel" required readonly
+                        />         
+                    </span>     
+                </div>         
+            </div> 
+            <div class="row" style="margin-top:20px;">
+                <div class="col">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-user"></i> 
+                        <input type="text" [(ngModel)]="modifyUser.username" pInputText placeholder="User Name "
+                        name="username" id="username" #username="ngModel" required
+                        />         
+                    </span>     
+                </div>         
+            </div> 
+            <div class="row" style="margin-top:10px;">
+                <div class="col">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-pencil"></i> 
+                        <input type="text" [(ngModel)]="modifyUser.first_name" pInputText placeholder="First Name "
+                        name="firstname" id="firstname" #firstname="ngModel" required
+                        />         
+                    </span>     
+                </div>         
+            </div>
+            <div class="row" style="margin-top:10px;">
+                <div class="col">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-pencil"></i> 
+                        <input type="text" [(ngModel)]="modifyUser.last_name" pInputText placeholder="Last Name "  
+                        name="lastname" id="lastname" #lastname="ngModel" required
+                        />         
+                    </span>     
+                </div>         
+            </div>
+            <div class="row" style="margin-top:10px;">
+                <div class="col">
+                    <p-button type="button" label="Update" (click)="modifyUserData()" 
+                    class="p-button-info"[disabled]="submitDisabled" ></p-button>
+                </div>
+            </div>
+        </form>
+         <div class="row" style="margin-top:30px;">
+            <div class="col" style="color:#0C9ED2;">
+                <h4><b>Change Password</b></h4>
+                <hr/>
+            </div>
+        </div>
+         <div class="row" style="margin-top:10px;">
+            <div class="col">
+                <span class="p-input-icon-left">
+                    <i class="pi pi-lock"></i> 
+                    <input type="password" [(ngModel)]="changePassword.old_password" pInputText placeholder="Old Password *"  
+                    name="upassword1" id="upassword1" #upassword1="ngModel" 
+                    />         
+                </span>     
+            </div>
+         </div>   
+         <div class="row" style="margin-top:10px;">
+            <div class="col">
+                <span class="p-input-icon-left">
+                    <i class="pi pi-lock"></i> 
+                    <input type="password" [(ngModel)]="changePassword.new_password" pInputText placeholder="Password *"  
+                    name="upassword" id="upassword" #upassword="ngModel" (change)="matchPassword()"
+                    />         
+                </span>   
+                 <div *ngIf="passwordNotMatched" class="label-required-error">
+                    Password Not matched
+                </div>   
+            </div> 
+         </div> 
+        <div class="row" style="margin-top:10px;">  
+            <div class="col">
+                <span class="p-input-icon-left">
+                    <i class="pi pi-lock"></i> 
+                    <input type="password" [(ngModel)]="password2" pInputText placeholder="Confirm Password *"  
+                    name="upassword2" id="upassword2" #upassword2="ngModel" (change)="matchPassword()"
+                    />         
+                </span>     
+            </div> 
+         </div>   
+         <div class="row" style="margin-top:10px;">
+            <div class="col">
+                <p-button type="button" label="Change" (click)="changePasswordData()" 
+                class="p-button-info"[disabled]="changePasswordDetails" ></p-button>
+            </div>
+        </div>
+    </div> 
+    </div>
+<div>
+
+
+
+
+
+
+<p-toast></p-toast>
+<p-toast position="top-left" key="tl"></p-toast>
+<p-toast position="top-center"  key="tc"></p-toast>
+<p-toast position="bottom-center"  key="bc"></p-toast>

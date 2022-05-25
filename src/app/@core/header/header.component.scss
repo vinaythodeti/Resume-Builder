@@ -1,0 +1,86 @@
+@import '~bootstrap/scss/mixins/breakpoints';
+
+
+.logo-container{
+  margin-block-start: 30%;
+  display: flex;
+  justify-items: auto;
+}
+
+.nav-link{
+  color:blue;
+}
+.menupanel{
+  background-color: #4BAD99 !important;
+  color:white;
+}
+.header-title{
+  color: black;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+}
+p-menubar{
+  border:1px transparent !important;
+  border-block-start-color: transparent !important;;
+}
+
+::ng-deep .menucus ul li:nth-child(1):active {
+  color: #0C9ED2 !important;
+}
+::ng-deep .menucus ul li:nth-child(2):active {
+  color: #0C9ED2 !important;
+}
+::ng-deep .menucus ul li:nth-child(3):active {
+  color: #0C9ED2 !important;
+}
+::ng-deep .menucus ul li:nth-child(4):active {
+  color: #0C9ED2 !important;
+}
+::ng-deep .menucus ul li:nth-child(5):active {
+  color: #0C9ED2 !important;
+}
+::ng-deep .ui-menu .ui-menuitem .ui-menuitem-link:hover{
+  background-color: #5393bc;
+  color: #0C9ED2 !important;
+}
+::ng-deep .ui-menu .ui-menuitem .ui-menuitem-link:active{
+  background-color: #5393bc;
+  color: #0C9ED2 !important;
+}
+::ng-deep .ui-menu,.ui-menu .ui-menu-child{
+  border: 0px;
+  background:#5393bc 0 0 repeat-x !important;
+}
+::ng-deep .ui-menu .ui-menuitem .ui-state-active{
+  background-color: #5393bc;
+}
+::ng-deep .ui-menu .ui-menuitem.ui-menuitem-active>.ui-menuitem-link,
+.ui-menu .ui-menuitem .ui-menuitem-link:hover{
+  background-color:#186ba0;
+}
+::ng-deep .menucus{
+  border-top:transparent !important;
+}
+::ng-deep .menucus1{
+  border:5px solid transparent !important;
+  background-color: transparent !important;
+  color:black !important;
+}
+.titlefirst{
+  color:#0C9ED2;
+  font-size: 2.1rem;
+  font-weight: 800;
+  font-family:Tahoma
+}
+.titlesecond{
+  color:#909191;
+  font-size: 2.1rem;
+  font-weight: 800;
+  font-family: Tahoma
+}
+.userprofile{
+  border-radius: 70%;
+}

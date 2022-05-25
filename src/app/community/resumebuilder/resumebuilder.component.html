@@ -1,0 +1,899 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+<body>
+    <div *ngIf="isProgress">
+        <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+    </div>
+    <div class="row" style="margin-top:10px;">
+        <h3>Resume Builder</h3>
+    </div>   
+    <form #personalform="ngForm" novalidate>
+        <div class="card" style="margin-top:20px;text-align:center;">
+            <div class="row">
+                <div class="col">
+                    <span>
+                        <h5><i class="pi pi-user"></i>  Personal Details*</h5>
+                    </span> &nbsp;
+                    <button pButton pRipple style="max-width:50%;" (click)="savePersonalDetails()" label="save" type="button" class="p-button-rounded p-button-secondary"></button>
+                </div>
+            </div>
+            <div class="row" style="margin-top:20px;">
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-pencil"></i>
+                        <input type="text" [(ngModel)]="personaldetails.fullName" pInputText placeholder="Full Name *"
+                         #fullname="ngModel" name="fullname" id="fullname"  required
+                         [ngClass]="{ 'input-border-green' : !(personalDetailsSubmitted && fullname.valid),
+                         'input-border-red': personalDetailsSubmitted && (fullname.invalid )}"
+                        />         
+                    </span>
+                </div>
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-pencil"></i>
+                    <input type="text" [(ngModel)]="personaldetails.country" pInputText placeholder="Country *"
+                         #countryinput="ngModel" name="countryinput" id="countryinput"  required (blur)="appendCountryCode($event)"
+                         [ngClass]="{ 'input-border-green' : !(personalDetailsSubmitted && countryinput.valid),
+                         'input-border-red': personalDetailsSubmitted && (countryinput.invalid )}"
+                        />  
+                    </span>
+                </div>
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-envelope"></i>
+                        <input type="text"  [(ngModel)]="personaldetails.emailId" pInputText placeholder="Email Id *"
+                        #emailid="ngModel" name="emailid" id="emailid" required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                        [ngClass]="{ 'input-border-green' : !(personalDetailsSubmitted && emailid.invalid),
+                        'input-border-red': personalDetailsSubmitted && (emailid.invalid )}"
+                        />         
+                    </span>
+                    <div *ngIf="emailid?.errors?.required || (emailid.dirty)">
+                        <label *ngIf="emailid?.errors?.pattern" class="label col-form-label label-required-error">
+                           Email is invalid
+                        </label>
+                    </div>    
+                </div>
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-phone"></i>
+                        <input type="text" [(ngModel)]="personaldetails.contactNo" pInputText placeholder="Contact No *"
+                        #contactno="ngModel" (keypress)="onNumberKeyPress($event)" name="contactno" id="contactno"  required
+                        [ngClass]="{ 'input-border-green' : !(personalDetailsSubmitted && contactno.invalid),
+                        'input-border-red': personalDetailsSubmitted && (contactno.invalid )}"
+                        />         
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-pencil"></i>
+                     <input type="text" [(ngModel)]="personaldetails.state" pInputText placeholder="State *"
+                         #stateinput="ngModel" name="stateinput" id="stateinput"  required
+                         [ngClass]="{ 'input-border-green' : !(personalDetailsSubmitted && stateinput.valid),
+                         'input-border-red': personalDetailsSubmitted && (stateinput.invalid )}"
+                        />  
+                    </span>
+                </div>
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-right">
+                        <i class="pi pi-pencil"></i>
+                    <input type="text" [(ngModel)]="personaldetails.district" pInputText placeholder="District *"
+                         #districtinput="ngModel" name="districtinput" id="districtinput"  required
+                         [ngClass]="{ 'input-border-green' : !(personalDetailsSubmitted && districtinput.valid),
+                         'input-border-red': personalDetailsSubmitted && (districtinput.invalid )}"
+                        />  
+                    </span>
+                </div>
+              <!---  <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-github"></i>
+                        <input type="text" name="githubprofile" [(ngModel)]="personaldetails.githubProfile" pInputText 
+                        placeholder="Github Profile Link"  class="input-border-green">  
+                    </span>
+                </div> -->
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                       <i> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
+                        <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/>
+                      </svg></i> 
+                        <input type="text" name="linkedinprofile" [(ngModel)]="personaldetails.linkedInProfile" pInputText 
+                        class="input-border-green" placeholder="LinkedIn Profile Link">  
+                    </span>
+                </div>
+            </div> 
+         <!---    <div class="row">
+               <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-external-link"></i>
+                        <input type="text" name="codingprofile" [(ngModel)]="personaldetails.codingProfile" pInputText
+                        class="input-border-green" placeholder="Coding Profile If Any">  
+                    </span> 
+                </div>
+            </div> -->
+        </div>  
+    </form>
+     <form #careerObjectiveform="ngForm" novalidate>
+        <div class="card" style="margin-top:20px;margin-bottom:10px;text-align:center;">
+            <div class="row">
+                <div class="col">
+                    <span>
+                        <h5><i class="pi pi-play"></i>  Career Objective*</h5>
+                    </span>&nbsp;
+                    <button pButton pRipple type="button" style="max-width:50%;" label="Refer"
+                    (click)="naviagteToExternalRoute('https://www.naukri.com/blog/career-objective-or-resume-objective-samples/')" 
+                    class="p-button-rounded p-button-secondary"></button> &nbsp;&nbsp;
+                     <button pButton pRipple style="max-width:50%;" (click)="saveCareerObjectiveDetails()" label="save" type="button" class="p-button-rounded p-button-secondary"></button>
+                </div>
+            </div>
+            <div class="row" style="margin-top:20px;">
+                <div class="col-md-10 offset-md-1">
+                    <textarea [(ngModel)]="careerObjective.careerObjective" style="width:100%;height:200px;"
+                     name="careerobjective"  id="careerobjective" placeholder="Enter Here*" pInputTextarea 
+                       required #careerobjective="ngModel" autoResize="autoResize"
+                     [ngClass]="{ 'input-border-green' : !(careerSubmitted && careerobjective.invalid),
+                    'input-border-red': careerSubmitted && careerobjective.invalid}"
+                     ></textarea>      
+                </div>
+            </div>
+        </div> 
+    </form>
+    <form #skillsform="ngForm" novalidate>
+        <div class="card" style="margin-top:20px;text-align:center;">
+            <div class="row">
+                <div class="col">
+                    <span>
+                        <h5><i class="pi pi-chart-line"></i> Skills*</h5>
+                    </span>&nbsp;
+                    <button pButton pRipple style="max-width:50%;" (click)="saveSkill()" label="save" type="button"  class="p-button-rounded p-button-secondary"></button>
+                </div>
+            </div>
+            <div class="row" style="margin-top:20px;">
+                <div class="col" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-pencil"></i>
+                        <input type="text" pInputText name="skills" id="skills" #skills="ngModel" [(ngModel)]="skill.skill"
+                        [required]="skillsList?.length==0"  [ngClass]="{ 'input-border-green' : !(skillsformSubmitted && skills.invalid),
+                        'input-border-red': skillsformSubmitted && skills.invalid}"
+                         placeholder="Ex: Java , Python , SQL, Angular 2+ *">         
+                    </span>
+                </div>
+            </div>
+            <div *ngIf="skillsList?.length" class="row" style="margin-top:15px;">
+                <div class="col" *ngFor="let opt of skillsList;let i=index">
+                    <p-chip styleClass="icon-chip-class"  [label]="opt.skill" (click)="confirmDelete(opt,i,'skill')"></p-chip>
+                </div>
+            </div>
+        </div>
+    </form>
+    <form #experienceform="ngForm" novalidate>  
+        <div class="card" style="margin-top:20px;text-align:center;">
+            <div class="row">
+                <div class="col">
+                    <span>
+                        <h5><i class="pi pi-link"></i> Experience</h5>
+                    </span>&nbsp;
+                    <button pButton pRipple type="button" style="max-width:50%;" (click)="addExperience()" label="save" class="p-button-rounded p-button-secondary"></button>
+                </div>
+            </div>
+            <div class="row" style="margin-top:20px;">
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-globe"></i>
+                        <input type="text" name="employerfield" id="employerfield" [(ngModel)]="experience.employer" 
+                        pInputText placeholder="Employer" #employerfield="ngModel" 
+                         [ngClass]="{ 'input-border-green' : !(experienceSubmitted && employerfield.invalid),
+                        'input-border-red': experienceSubmitted && employerfield.invalid}">         
+                    </span>
+                </div>
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-plus"></i>
+                        <input type="text" name="jobtitle" id="jobtitle" [(ngModel)]="experience.jobTitle" pInputText 
+                        [ngClass]="{ 'input-border-green' : !(experienceSubmitted && jobtitle.invalid),
+                         'input-border-red': experienceSubmitted && jobtitle.invalid}" #jobtitle="ngModel" placeholder="Job Title">         
+                    </span>
+                </div>
+                <div class="col-sm-3" style="margin-top:20px;">
+                <span class="p-input-icon-left">
+                    <i class="pi pi-id-card"></i>
+                    <input type="number" name="jobexperience" id="jobexperience" [(ngModel)]="experience.experience" pInputText
+                    #jobexperience="ngModel" [ngClass]="{ 'input-border-green' : !(experienceSubmitted && jobexperience.invalid),
+                    'input-border-red': experienceSubmitted && jobexperience.invalid}"
+                    placeholder="Experience in Months Ex: 3 Months">         
+                </span>
+                </div>
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <p-calendar  name="fromdate" id="fromdate" [(ngModel)]="experience.fromDate"
+                    dateFormat="dd/mm/yy" class="calendar-control" #fromdate="ngModel" placeholder="Start Date*" 
+                      [ngClass]="{ 'input-border-green' : !(experienceSubmitted && fromdate.invalid),
+                     'input-border-red': experienceSubmitted && fromdate.invalid}"
+                     ></p-calendar>
+                </div>
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <p-calendar  name="todate" id="todate" [(ngModel)]="experience.toDate"
+                    dateFormat="dd/mm/yy" class="calendar-control" #todate="ngModel" placeholder="End Date *" 
+                      [ngClass]="{ 'input-border-green' : !(experienceSubmitted && todate.invalid),
+                     'input-border-red': experienceSubmitted && todate.invalid}" 
+                     ></p-calendar>   
+                </div>
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-pencil"></i>
+                    <input type="text" [(ngModel)]="experience.country" pInputText placeholder="Country *"
+                         #countryinputexp="ngModel" name="countryinputexp" id="countryinputexp"
+                         [ngClass]="{ 'input-border-green' : !(personalDetailsSubmitted && countryinputexp.valid),
+                         'input-border-red': personalDetailsSubmitted && (countryinputexp.invalid )}"
+                    /> 
+                    </span>
+                </div>
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-pencil"></i>
+                   <input type="text" [(ngModel)]="experience.state" pInputText placeholder="State *"
+                         #stateinputexp="ngModel" name="stateinputexp" id="stateinputexp" 
+                         [ngClass]="{ 'input-border-green' : !(personalDetailsSubmitted && stateinputexp.valid),
+                         'input-border-red': personalDetailsSubmitted && (stateinputexp.invalid )}"
+                    /> 
+                    </span>
+                </div>
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-right">
+                        <i class="pi pi-pencil"></i>
+                    <input type="text" [(ngModel)]="experience.city" pInputText placeholder="City *"
+                         #cityinputexp="ngModel" name="cityinputexp" id="cityinputexp"
+                         [ngClass]="{ 'input-border-green' : !(personalDetailsSubmitted && cityinputexp.valid),
+                         'input-border-red': personalDetailsSubmitted && (cityinputexp.invalid )}"
+                    /> 
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3"  style="margin-top:20px;">
+                    <span>
+                     <label style="color:grey;margin-top:10px;">Working Currently</label>&nbsp;&nbsp;
+                     <p-checkbox name="presentinput" binary="true" (click)="selected(experience.present)"
+                      [required]="experienceSubmitted"
+                      [(ngModel)]="experience.present"></p-checkbox>
+                    </span>
+                </div>
+                <div class="col-md-6 offset-md-1" style="margin-top:20px;">
+                    <textarea [rows]="1" [cols]="100" style="width:70%;height:200px;"  name="jobdescription" id="jobdescription"  pInputText
+                     [(ngModel)]="experience.jobDescription"  #jobdescription="ngModel" 
+                     [ngClass]="{ 'input-border-green' : !(experienceSubmitted && jobdescription.invalid),
+                    'input-border-red': experienceSubmitted && jobdescription.invalid}"
+                     placeholder="Job Description" pInputTextarea autoResize="autoResize"></textarea>      
+                </div>
+            </div>
+            <div class="row" style="margin-top:20px;">
+                <div class="col-sm-4" *ngFor="let value of experienceList;let i=index" style="margin-left:0px;">
+                    <p-card [header]="value.jobTitle" [style]="{'width': '18rem', 'margin-bottom': '2em'}">
+                        <ng-template pTemplate="body">
+                            <span><b>{{value.employer}}</b></span>
+                            <p-scrollPanel [style]="{width: '100%', height: '50px'}" styleClass="custom">
+                               {{value.jobDescription}}
+                            </p-scrollPanel>
+                           
+                        </ng-template>
+                            <ng-template pTemplate="footer">
+                                <p-button label="Edit" (click)="editExperience(i)"></p-button>
+                                &nbsp;&nbsp;
+                                 <p-button label="Delete" (click)="confirmDelete(value,i,'experience')" icon="pi pi-trash"></p-button>
+                            </ng-template>
+                    </p-card>
+                </div>
+            </div>
+        </div> 
+    </form>   
+    <form #educationform="ngForm" novalidate>
+        <div class="card" style="margin-top:20px;text-align:center;">
+            <div class="row">
+                <div class="col">
+                    <span>
+                        <h5><i class="fas fa-graduation-cap"></i> Education*</h5>
+                    </span>&nbsp;
+                    <button pButton pRipple type="button" style="max-width:50%;" label="save" (click)="addEducation()" class="p-button-rounded p-button-secondary"></button>
+                </div>
+            </div>
+            <div class="row" style="margin-top:20px;">
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-globe"></i>
+                        <input type="text" name="educationtype" id="educationtype" [(ngModel)]="education.educationType"
+                        #educationtype="ngModel" [required]="educationList?.length==0" 
+                        [ngClass]="{ 'input-border-green' : !(educationSubmitted && educationtype.invalid),
+                       'input-border-red': educationSubmitted && educationtype.invalid}"
+                         pInputText placeholder="School/Graduation *"/>         
+                    </span>
+                </div>
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-ellipsis-h"></i>
+                        <input type="text" name="branchval" id="branchval" [(ngModel)]="education.branch"
+                        #branchval="ngModel" 
+                        [ngClass]="{ 'input-border-green' : !(educationSubmitted && branchval.invalid),
+                       'input-border-red': educationSubmitted && branchval.invalid}"
+                         pInputText placeholder="Branch"/>         
+                    </span>
+                </div>
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                        <i class="fas fa-school"></i>
+                        <input type="text"  name="institutionname" id="institutionname" [(ngModel)]="education.institutionName"
+                        #institutionname="ngModel" [required]="educationList?.length==0" 
+                        [ngClass]="{ 'input-border-green' : !(educationSubmitted && institutionname.invalid),
+                       'input-border-red': educationSubmitted && institutionname.invalid}"
+                        pInputText placeholder="Institution Name *"
+                        />         
+                    </span>
+                </div>
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-calendar"></i>
+                        <input type="text" [(ngModel)]="education.yearOfPassing" (keypress)="onNumberKeyPress($event)" pInputText placeholder="Graduation Year *"
+                        name="yop" id="yop"  #yop="ngModel" [required]="educationList?.length==0" 
+                        [ngClass]="{ 'input-border-green' : !(educationSubmitted && yop.invalid),
+                       'input-border-red': educationSubmitted && yop.invalid}"
+                        />         
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-percentage"></i>
+                        <input type="text" (keypress)="onNumberKeyPress($event)" [(ngModel)]="education.percentage" pInputText placeholder="Percentage *"
+                        name="percentagefield" id="percentagefield" #percentagefield="ngModel" [required]="educationList?.length==0" 
+                        [ngClass]="{ 'input-border-green' : !(educationSubmitted && percentagefield.invalid),
+                       'input-border-red': educationSubmitted && percentagefield.invalid}"
+                        />         
+                    </span>
+                </div>
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-pencil"></i>
+                    <input type="text" [(ngModel)]="education.country" pInputText placeholder="Country *"
+                         #countryinputedu="ngModel" name="countryinputedu" id="countryinputedu"  [required]="educationList?.length==0" 
+                         [ngClass]="{ 'input-border-green' : !(educationSubmitted && countryinputedu.valid),
+                         'input-border-red': educationSubmitted && (countryinputedu.invalid )}"
+                    /> 
+                    </span>
+                </div>
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-pencil"></i>
+                    <input type="text" [(ngModel)]="education.state" pInputText placeholder="State *"
+                         #stateinputedu="ngModel" name="stateinputedu" id="stateinputedu"  [required]="educationList?.length==0" 
+                         [ngClass]="{ 'input-border-green' : !(educationSubmitted && stateinputedu.valid),
+                         'input-border-red': educationSubmitted && (stateinputedu.invalid )}"
+                    /> 
+                    </span>
+                </div>
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-right">
+                        <i class="pi pi-pencil"></i>
+                    <input type="text" [(ngModel)]="education.district" pInputText placeholder="City *"
+                         #cityinputedu="ngModel" name="cityinputedu" id="cityinputedu"  [required]="educationList?.length==0" 
+                         [ngClass]="{ 'input-border-green' : !(educationSubmitted && cityinputedu.valid),
+                         'input-border-red': educationSubmitted && (cityinputedu.invalid )}"
+                    />
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-calendar-plus"></i>
+                        <p-calendar   name="startdate" id="startdate" [(ngModel)]="education.startDate"
+                        #startdate="ngModel" [required]="educationList?.length==0"
+                          dateFormat="dd/mm/yy" class="calendar-control" placeholder="Start Date *" 
+                         [ngClass]="{ 'input-border-green' : !(educationSubmitted && startdate.invalid),
+                        'input-border-red': educationSubmitted && startdate.invalid}"
+                        ></p-calendar>      
+                    </span>
+                </div>
+                <div class="col-sm-3" style="margin-top:20px;">
+                 <p-calendar  name="enddate" id="enddate" [(ngModel)]="education.endDate"
+                    #enddate="ngModel" dateFormat="dd/mm/yy" class="calendar-control" placeholder="End Date *" 
+                      [required]="educationList?.length==0" [ngClass]="{ 'input-border-green' : !(educationSubmitted && enddate.invalid),
+                     'input-border-red': educationSubmitted && enddate.invalid}"></p-calendar> 
+                </div>
+            </div>
+            <div *ngIf="educationList?.length">
+                <div  *ngFor="let value of educationList;let i=index" class="educationListcard" style="margin-top:20px;margin-right:20px;">
+                    <b  style="margin-left:20px;">EDUCATION</b>
+                    <div *ngIf="educationList?.length" style="margin-bottom:20px;">
+                        <div style="margin-left:20px;margin-top:20px;margin-right:20px;">
+                            <div class="row" style="margin-bottom:10px;">           
+                                 <div class="col" style="font-size:13px;font-weight:700;">
+                                    {{value?.educationType}} 
+                                </div>
+                            </div>    
+                            <div class="row" style="margin-bottom:10px;"> 
+                                <div class="col">
+                                    <span *ngIf="value?.branch" style="font-size:13px;font-weight:700;">
+                                        <span style="font-weight:500;">in</span>&nbsp;{{value?.branch}}
+                                    </span>
+                                </div>
+                            </div>    
+                            <div class="row" style="margin-bottom:10px;">
+                                <div class="col" style="font-size:11px;font-weight:700;">
+                                    <i><span style="font-size:small">{{value?.district}},</span>&nbsp;{{value?.state}}&nbsp;
+                                        <span>,{{value?.country}}</span></i>
+                                 </div>
+                            </div>  
+                             <div class="row" style="margin-bottom:10px;"> 
+                                 <div class="col" style="font-size:11px;font-weight:700;">
+                                    {{value?.startDate | date:'mediumDate'}} to {{value?.endDate | date:'mediumDate'}}
+                                 </div>
+                            </div>
+                            <div class="row">
+                                <div class="col" style="font-size:13px;font-weight:500;">
+                                    {{value?.institutionName}}  
+                                    <span>
+                                        &nbsp; - {{value?.percentage}} %
+                                    </span>
+                                </div>
+                            </div> 
+                            <div class="row" style="margin-top:20px;">
+                                <div class="col">
+                                 <p-button label="Edit" (click)="editEducation(i)"></p-button>
+                                &nbsp;&nbsp;
+                                 <p-button label="Delete" (click)="confirmDelete(value,i,'education')" icon="pi pi-trash"></p-button>
+                                </div>
+                            </div>  
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <!-- <div class="row" *ngIf="educationList?.length" style="margin-top:20px;">
+                <p-table [columns]="cols" [value]="educationList" styleClass="p-datatable-responsive-demo">
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th *ngFor="let col of columns">
+                                {{col.header}}
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                        <tr (click)="editEducation(rowData[columns])">
+                            <td *ngFor="let col of columns">
+                                {{rowData[col.field]}}
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div> -->
+        </div>
+    </form>
+      <form #traniningsform="ngForm" novalidate>
+         <div class="card"  style="margin-top:20px;text-align:center;"> 
+            <div class="row">
+                <div class="col">
+                    <span>
+                        <h5> Trainings/ Certifications/ Seminars</h5>
+                    </span>&nbsp;
+                    <button pButton pRipple style="max-width:50%;" type="button" label="save" (click)="saveTraining()" class="p-button-rounded p-button-secondary"></button>
+                </div>
+            </div>
+            <div class="row" style="margin-top:20px;">
+                   <div class="col-md-10 offset-md-1">
+                    <textarea [(ngModel)]="trainingscertificates.trainAndCertificates" style="width:100%;height:200px;"
+                     name="trainingsinput"  id="trainingsinput" placeholder="Enter Here*" pInputTextarea 
+                     #trainingsinput="ngModel" autoResize="autoResize"
+                     [ngClass]="{ 'input-border-green' : !(trainingSubmitted && trainingsinput.invalid),
+                    'input-border-red': trainingSubmitted && trainingsinput.invalid}"
+                     ></textarea>      
+                </div>
+            </div>   
+            <div class="row" style="margin-top:20px;">
+                <div class="col-sm-4" *ngFor="let value of trainingList;let i=index" style="margin-left:0px;">
+                    <p-card  [style]="{'width': '18rem', 'margin-bottom': '2em'}">
+                        <ng-template pTemplate="body">
+                            <p>
+                               {{value.trainAndCertificates}}
+                            </p>             
+                        </ng-template>
+                            <ng-template pTemplate="footer">
+                                 <p-button label="Delete" (click)="confirmDelete(value,i,'training')" icon="pi pi-trash"></p-button>
+                            </ng-template>
+                    </p-card>
+                </div>
+            </div>   
+        </div>
+    </form> 
+    <form #hobbiesform="ngForm" novalidate>
+         <div class="card"  style="margin-top:20px;text-align:center;"> 
+            <div class="row">
+                <div class="col">
+                    <span>
+                        <h5>Interests/ Hobbies*</h5>
+                    </span>&nbsp;
+                    <button pButton pRipple style="max-width:50%;" type="button" label="save" (click)="saveHobby()" class="p-button-rounded p-button-secondary"></button>
+                </div>
+            </div>
+            <div class="row" style="margin-top:20px;">
+                   <div class="col-md-10 offset-md-1">
+                    <textarea [(ngModel)]="interestsHobbies.hobby" style="width:100%;height:200px;"
+                     name="hobbiesinput"  id="hobbiesinput" placeholder="Enter Here*" pInputTextarea 
+                       [required]="hobbyList?.length==0" #hobbiesinput="ngModel" autoResize="autoResize"
+                     [ngClass]="{ 'input-border-green' : !(hobbySubmitted && hobbiesinput.invalid),
+                    'input-border-red': hobbySubmitted && hobbiesinput.invalid}"
+                     ></textarea>      
+                </div>
+            </div>
+            <div class="row" style="margin-top:20px;">
+                <div class="col-sm-4" *ngFor="let value of hobbyList;let i=index" style="margin-left:0px;">
+                    <p-card  [style]="{'width': '18rem', 'margin-bottom': '2em'}">
+                        <ng-template pTemplate="body">
+                            <p>
+                               {{value.hobby}}
+                            </p>             
+                        </ng-template>
+                            <ng-template pTemplate="footer">
+                                 <p-button label="Delete" (click)="confirmDelete(value,i,'hobby')" icon="pi pi-trash"></p-button>
+                            </ng-template>
+                    </p-card>
+                </div>
+            </div>   
+        </div>
+    </form> 
+    <form #languagesform="ngForm" novalidate>
+         <div class="card"  style="margin-top:20px;text-align:center;"> 
+            <div class="row">
+                <div class="col">
+                    <span>
+                        <h5>Languages*</h5>
+                    </span>&nbsp;
+                    <button pButton pRipple style="max-width:50%;" type="button" label="save" (click)="saveLanguage()" class="p-button-rounded p-button-secondary"></button>
+                </div>
+            </div>
+            <div class="row" style="margin-top:20px;">
+                <div class="col" style="margin-top:20px;">
+                   <span class="p-input-icon-left">
+                        <i class="pi pi-pencil"></i>
+                        <input type="text" [(ngModel)]="language.language" pInputText placeholder="Languages"
+                        name="languageinput" id="languageinput" #languageinput="ngModel" [required]="languageList?.length==0" 
+                        [ngClass]="{ 'input-border-green' : !(languageSubmitted && languageinput.invalid),
+                       'input-border-red': languageSubmitted && languageinput.invalid}"
+                        />         
+                    </span>     
+                </div>
+            </div> 
+             <div *ngIf="languageList?.length" class="row" style="margin-top:15px;">
+                <div class="col" *ngFor="let opt of languageList;let i=index">
+                    <p-chip styleClass="icon-chip-class"  [label]="opt.language"  (click)="confirmDelete(opt,i,'language')"></p-chip>
+                </div>
+            </div>  
+        </div>
+    </form>    
+    <form #projectsForm="ngForm" novalidate>
+         <div class="card"  style="margin-top:20px;text-align:center;"> 
+            <div class="row">
+                <div class="col">
+                    <span>
+                        <h5><i class="pi pi-th-large"></i> Projects*</h5>
+                    </span>&nbsp;
+                    <button pButton pRipple style="max-width:50%;" type="button" label="save" (click)="saveProjectDetails()" class="p-button-rounded p-button-secondary"></button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-pencil"></i>
+                        <input type="text" [(ngModel)]="project.title" pInputText placeholder="Project Title"
+                        name="projectTitle" id="projectTitle" #projectTitle="ngModel" 
+                        [ngClass]="{ 'input-border-green' : !(projectSubmitted && projectTitle.invalid),
+                       'input-border-red': projectSubmitted && projectTitle.invalid}"
+                        />         
+                    </span>
+                </div>
+                <div class="col" style="margin-top:20px;">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-link"></i>
+                        <input type="text" [(ngModel)]="project.link" pInputText placeholder="Project link"
+                        name="linkinput" id="linkinput" #linkinput="ngModel" 
+                        [ngClass]="{ 'input-border-green' : !(projectSubmitted && linkinput.invalid),
+                       'input-border-red': projectSubmitted && linkinput.invalid}"
+                        />         
+                    </span>
+                </div>
+            </div>  
+            <div class="row">
+                <div class="col" style="margin-top:20px;">
+                        <textarea type="text" [(ngModel)]="project.description" style="width:100%;height:200px;"  placeholder="Project Description"
+                        name="projectlink" autoResize="autoResize" id="projectlink" #projectlink="ngModel" pInputTextarea 
+                        [ngClass]="{ 'input-border-green' : !(projectSubmitted && projectlink.invalid),
+                       'input-border-red': projectSubmitted && projectlink.invalid}"
+                        ></textarea>         
+                </div>
+            </div>  
+            <div class="row" *ngIf="skillsList?.length">
+                <div class="col">
+                    <div class="card" *ngIf="skillsList?.length" style="margin-top:20px;text-align:center;">
+                    <span *ngIf="skillsList?.length"><h5>Your Skills</h5></span>
+                        <div *ngIf="skillsList?.length" class="row" style="margin-top:15px;">
+                            <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+                            <div class="col" *ngFor="let opt of skillsList;let i=index">
+                                <p-chip styleClass="icon-chip-class"  [label]="opt.skill" (click)="confirm(opt)"></p-chip>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>   
+            <div class="row"> 
+               <div class="col">
+                    <div class="card" style="margin-top:20px;text-align:center;">
+                          <span><h5>Skills Used</h5></span><br/>
+                          <span><b>Please Pickup Skill or add New Skill by clicking on new button</b></span>
+                        <div class="row">
+                            <div class="col">
+                                <button pButton (click)="showBasicDialog()" pRipple style="max-width:50%;" type="button" label="new" icon="pi pi-plus" class="p-button-rounded p-button-secondary"></button>
+                            </div>
+                        </div>
+                        <div *ngIf="project.skills?.length" class="row" style="margin-top:15px;">
+                            <div class="col" *ngFor="let opt of project.skills;let i=index">
+                            <span>
+                              <p-chip styleClass="icon-chip-class"  [label]="opt.skill"  
+                              (click)="confirmDelete(opt,i,'projectskill')"  ></p-chip>
+                           </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+            </div> 
+             <div>   
+                <div *ngIf="projectList?.length" style="margin-bottom:20px;margin-right:10px;">
+                    <div *ngFor="let value of projectList;let i =index" style="margin-top:20px;margin-left:20px;">
+                        <div class="card" *ngIf="value" >
+                                <span><b>PROJECT</b>&nbsp;<b>{{i+1}}</b></span><br/><i class="pi-pi-pencil"></i>
+                                 <div class="row" style="font-size:13px;font-weight:700px;">
+                                    <span><b>{{value?.title}}</b></span>
+                                </div>
+                                 <div class="row" style="margin-top:10px;">
+                                    <div class="col">
+                                        {{value?.description}}
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:10px;">
+                                    <b *ngIf="value?.skills?.length">Technologies Used -</b>
+                                    <div *ngFor="let s of value?.skills">
+                                        <div class="col" style="margin-left:10px;padding:2px 4px 2px 4px;" id="skillslistsection">{{s.skill}}</div>
+                                    </div>
+                                </div>
+                                <div *ngIf="value?.link" class="row" style="margin-top:10px;">
+                                    <b>Link -</b>
+                                    {{value?.link}}
+                                </div>
+                                 <div class="row" style="margin-top:20px;">
+                                    <div class="col">
+                                        <p-button label="Edit" (click)="editProject(value,i)" ></p-button>
+                                            &nbsp;&nbsp;
+                                        <p-button label="Delete" (click)="confirmDelete(value,i,'project')" icon="pi pi-trash"></p-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+             <div class="row" style="margin-top:20px;">
+                <div class="col">
+                    <button pButton type="button" (click)="saveAllFields()" label="Prepare Resume" class="p-button-pencil"></button>
+                    &nbsp; <button pButton ngxPrint  printSectionId="resumeCard" label="Print Resume" [useExistingCss]="true" [disabled]="!preparedResume"  class="p-button-info"></button>
+                </div>
+            </div>   
+         </div>    
+    </form>                 
+</body>
+
+<p-toast></p-toast>
+<p-toast position="top-left" key="tl"></p-toast>
+<p-toast position="top-center"  key="tc"></p-toast>
+<p-toast position="bottom-center"  key="bc"></p-toast>
+
+<p-toast position="bottom-center" key="c" (onClose)="onReject()" [baseZIndex]="5000">
+    <ng-template let-message pTemplate="message">
+        <div class="p-flex p-flex-column" style="flex: 1;">
+            <div class="p-text-center">
+                <i class="pi pi-exclamation-triangle" style="font-size: 3rem"></i>
+                <h4>{{message.summary}}</h4>
+                <p>{{message.detail}}</p>
+            </div>
+            <div class="p-grid p-fluid">
+                <div class="p-col-6">
+                    <button type="button" pButton (click)="onConfirm()" label="Yes" class="p-button-success"></button>
+                </div>
+                <div class="p-col-6">
+                    <button type="button" pButton (click)="onReject()" label="No" class="p-button-secondary"></button>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</p-toast>   
+    
+
+ <div #resume class="card" id="resumeCard" *ngIf="preparedResume" style="margin-top:20px;font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;color:black;">
+    <div class="col" style="margin-top:20px;">
+        <span><h5><b>{{personalDatamock.fullName.toUpperCase()}}</b></h5></span>
+    </div>
+    <div class="row" style="margin-top:20px;margin-left:20px;">
+        <div class="col-sm-4">
+            <i class="pi pi-envelope"></i>&nbsp;
+            <span>{{personalDatamock.emailId}}</span>
+        </div>
+        <div class="col-sm-2">
+            <i class="pi pi-phone"></i>&nbsp;
+            <span>{{personalDatamock.contactNo}}</span>
+        </div>
+        <div class="col">
+            <i class="pi pi-map-marker"></i>&nbsp;
+             <span>{{personalDatamock.district}}</span>,
+             <span>{{personalDatamock.state}}</span>,
+             <span>{{personalDatamock.country}}</span>
+        </div>
+        <div class="col">
+             <div *ngIf="personalDatamock?.linkedInProfile" class="col">
+                <i> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
+                <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/>
+                </svg>
+                </i>&nbsp;
+            {{personalDatamock?.linkedInProfile}}
+            </div>
+        </div>    
+    </div>
+    <hr/>
+    <b style="margin-left:20px;">CAREER OBJECTIVE</b>
+    <p style="margin-left:20px;margin-right:20px;margin-top:10px;" *ngIf="careerObjectiveMock?.careerObjective">
+        {{careerObjectiveMock?.careerObjective}} 
+     </p>
+     <div class="row" style="margin-top:20px;margin-left:20px;margin-right:20px;">
+    </div>
+    <hr/>
+     <div *ngIf="skillsMockData?.length">
+        <b style="margin-left:20px;">SKILLS</b>
+        <div class="row" style="margin-top:20px;margin-left:20px;margin-right:20px;">
+            <div *ngFor="let skill of skillsMockData" class="col">
+                <span id="skillslistsection">{{skill.skill}}</span>
+            </div>
+        </div>
+     </div>
+     <hr/>
+    <b *ngIf="experienceMockdata?.length" style="margin-left:20px;">PROFESSIONAL EXPERIENCE</b><br/>
+    <div class="row" *ngIf="experienceMockdata?.length" style="margin-left:20px;">
+        <div *ngFor="let value of experienceMockdata">
+            <div style="margin-right:20px;margin-top:20px;">
+                <div class="row">
+                    <div class="col-sm-3" style="font-size:13px;font-weight:700;">
+                        {{value?.jobTitle}}
+                    </div>
+                    <div class="col-sm-3" style="font-size:11px;font-weight:700;">
+                        {{value?.employer}}
+                    </div>
+                    <div class="col-sm-3" style="font-size:11px;font-weight:600;">
+                        <i><span>{{value?.city}},</span>&nbsp;{{value?.state}}&nbsp;
+                        <span>,{{value?.country}}</span></i>
+                    </div>
+                    <div class="col-sm-3" style="font-size:11px;font-weight:300;">
+                        {{value?.fromDate | date:'mediumDate'}} <span *ngIf=" 'value?.toDate' || 'value?.present'">to</span> 
+                        <span *ngIf="value?.toDate; else presentData">{{value?.toDate | date:'mediumDate'}}</span>
+                        &nbsp;
+                        <ng-template #presentData>
+                               <span *ngIf="value?.present">Present</span>
+                        </ng-template>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:10px;">
+                    <div class="col">
+                        {{value?.jobDescription}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <b *ngIf="educationMockData?.length" style="margin-left:20px;">EDUCATION</b>
+    <div *ngIf="educationMockData?.length" style="margin-bottom:20px;">
+        <div *ngFor="let value of educationMockData" style="margin-left:20px;margin-top:20px;margin-right:20px;">
+            <div class="row">
+                <div class="col-sm-6" style="font-size:13px;font-weight:700;">
+                    {{value?.educationType}} 
+                    <span *ngIf="value?.branch" style="margin-left:10px;">
+                       <span style="font-weight:500;">in</span>&nbsp;{{value?.branch}}
+                    </span>
+                </div>
+                <div class="col" style="font-size:11px;font-weight:700;">
+                    <i><span style="font-size:small">{{value?.district}},</span>&nbsp;{{value?.state}}&nbsp;
+                        <span>,{{value?.country}}</span></i>
+                 </div>
+                 <div class="col" style="font-size:11px;font-weight:300;">
+                    {{value?.startDate | date:'mediumDate'}} to {{value?.endDate | date:'mediumDate'}}
+                 </div>
+            </div>
+            <div class="row">
+                <div class="col" style="font-size:13px;font-weight:500;">
+                    {{value?.institutionName}}  
+                    <span>
+                        &nbsp; - {{value?.percentage}} %
+                    </span>
+                </div>
+            </div>   
+        </div>
+    </div>  
+    <hr/>
+    <b *ngIf="projectsMockData?.length" style="margin-left:20px;">PROJECTS</b>   
+    <div *ngIf="projectsMockData?.length" style="margin-bottom:20px;margin-left:20px;margin-right:20px;">
+        <div *ngFor="let value of projectsMockData" style="margin-top:20px;margin-left:20px;">
+            <div class="row" style="font-size:13px;font-weight:700px;">
+                <span><b>{{value?.title}}</b></span>
+            </div>
+            <div class="row" style="font-size:11px;font-weight:500px;margin-top:10px;">
+                <div class="col">
+                    <span>{{value?.description}}</span>
+                </div>
+            </div>
+            <div class="row" style="margin-top:10px;">
+                <b>Technologies Used -</b>
+                <div *ngFor="let s of value?.skills">
+                    <div class="col" style="margin-left:10px;padding:2px 4px 2px 4px;" id="skillslistsection">{{s.skill}}</div>
+                    &nbsp;&nbsp;
+                </div>
+            </div>
+            <div *ngIf="value?.link" class="row" style="margin-top:10px;">
+                <b>Link -</b>
+                {{value?.link}}
+            </div>
+        </div>
+    </div> 
+     <hr/> 
+    <b *ngIf="trainingList?.length" style="margin-left:20px;">TRAININGS/CEDRTIFICATES/SEMINARS</b><br/>  
+      <div *ngIf="trainingList?.length">
+        <div *ngFor="let value of trainingList;let i=index" style="margin-left:20px;margin-top:20px;margin-right:20px;">
+            <div class="row">
+                <div class="col-sm-6">
+                   {{i+1}}&nbsp;.{{value?.trainAndCertificates}} 
+                </div>
+            </div>
+        </div>
+      </div>
+      <hr/>
+       <b *ngIf="hobbyList?.length" style="margin-left:20px;">INTRESTS/HOBBIES</b><br/>  
+      <div *ngIf="hobbyList?.length">
+        <div *ngFor="let value of hobbyList;let i=index" style="margin-left:20px;margin-top:20px;margin-right:20px;">
+            <div class="row">
+                <div class="col-sm-6">
+                   {{i+1}}&nbsp;.{{value?.hobby}} 
+                </div>
+            </div>
+        </div>
+      </div>
+      <hr/>
+        <b *ngIf="languageList?.length" style="margin-left:20px;">LANGUAGES</b><br/>  
+      <div *ngIf="languageList?.length"  class="row">
+        <div *ngFor="let value of languageList;let i=index" style="margin-left:20px;margin-top:20px;margin-right:20px;">
+             <div class="col">
+                {{value?.language}} 
+            </div>
+        </div>
+      </div>           
+</div>
+
+
+
+<p-dialog header="Add New Skill" [(visible)]="displayBasic" [style]="{width: '75vw'}" [baseZIndex]="10000">
+   <div class="col" style="margin-top:20px;">
+         <span class="p-input-icon-left">
+             <i class="pi pi-pencil"></i>
+             <input type="text" pInputText name="skillss" id="skillss" #skillss="ngModel" [(ngModel)]="skill.skill"
+             [ngClass]="{ 'input-border-green' : !(skillsformSubmitted && skillss.invalid),
+            'input-border-red': skillsformSubmitted && skillss.invalid}"
+            placeholder="Ex: Java , Python , SQL, Angular 2+ *">         
+        </span>
+
+    </div>
+    <br/>
+    <div class="col" style="margin-left:50px;">
+        <button pButton pRipple style="max-width:50%;" (click)="saveSkill('project')" label="save" type="button" class="p-button-rounded p-button-secondary"></button>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="displayBasic=false" label="Ok" styleClass="p-button-text"></p-button>
+    </ng-template>
+</p-dialog>

@@ -1,0 +1,145 @@
+
+body{
+    /* Location of the image */
+  background-image: url('../../assets/images/homepagebg.jpg');
+  
+  /* Background image is centered vertically and horizontally at all times */
+  background-position: center center;
+  
+  /* Background image doesn't tile */
+  background-repeat: no-repeat;
+  
+  /* Background image is fixed in the viewport so that it doesn't move when 
+     the content's height is greater than the image's height */
+  background-attachment: inherit;
+  
+  /* This is what makes the background image rescale based
+     on the container's size */
+  background-size: cover;
+  
+  /* Set a background color that will be displayed
+     while the background image is loading */
+  background-color: #464646;
+}
+.container{
+    max-width: 100%;
+    height: auto;
+    position: inherit;
+}
+img {
+    max-width: 100%;
+    height: auto;
+  }
+  .advertisetitles{
+    font-weight: 300;
+    font-size: 1.3rem;
+    color: white;
+    text-shadow: 2px 2px 4px #000000;
+    font-variant-caps: initial;
+    align-items: center;
+    justify-content: center;
+    display:flex;
+    font-style: italic;
+  }
+  .advertise{
+      margin-top: 4%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+
+  .homepagetitle{
+      font-weight: 400;
+      font-size: 1.6rem;
+      color: white;
+      text-shadow: 2px 2px 4px #000000;
+      font-variant-caps: initial;
+      align-items: center;
+      justify-content: center;
+      display:flex;
+  }
+  .homepagetitle2{
+    font-weight: 400;
+    font-size: 1.6rem;
+    color:white;
+    font-variant-caps: initial;
+    align-items: center;
+    justify-content: center;
+    display:flex;
+    position:relative;
+  }
+  body{
+      color: white;
+  }
+  p{
+      color: white;
+      text-shadow: 4px 4px 6px #000000;
+      align-items: center;
+      justify-content: center;
+      display:flex;
+      font-weight: 300;
+      width:auto;
+      margin-top:2%;
+      text-align:center;
+  }
+  .homepagedescription{
+      background-color:transparent !important;
+      display:flex;
+      align-items: center;
+      justify-content: center;
+      display:flex;
+      font-weight: 300;
+      width:80%;
+      text-align:left;
+      border-radius: 10px;
+      position: relative;
+
+  }
+  .descriptiondiv{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+  .advertise{
+   margin-top: 4%;
+    font-style: italic;
+  }
+  .singlebutton{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+  // .p-button{
+  //     background-color:red ;
+  //     color: white;
+  // }
+  button:hover{
+    background-color:#909191 ;
+    color:#0C9ED2;
+  }
+  .advertisebutton{
+    margin-top: 1%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  // #advertisetitles{
+  //   background-color:crimson ;
+  // }
+
+  #advertisetitles {
+    color: #ffffff;
+    background: red;
+    border: 1px solid #2196F3;
+    padding: 0.5rem 1rem;
+    font-size: 2rem;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    border-radius: 3px;
+}
+
+:host ::ng-deep{
+  .p-toast{
+    width:300px;
+    height:auto;
+  }
+}
